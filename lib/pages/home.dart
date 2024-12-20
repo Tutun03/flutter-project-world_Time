@@ -11,7 +11,16 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:SafeArea(child: Text('home screen'))
+      body:SafeArea(child: Column(
+        children: [
+          TextButton.icon(onPressed: (){
+            Navigator.pushNamed(context, '/location');
+          }, label: Text('Edit location'),
+          icon: Icon(Icons.edit_location))
+        ],
+      ))
     );
   }
 }
+
+//pushing and poping of routes should be done in efficient manner.
