@@ -1,12 +1,15 @@
 import 'package:http/http.dart';
 import 'dart:convert';
-
+import 'package:intl/intl.dart';
 class WorldTime{
   String location ;//initialize it firstly.//location property that we show on the user interface what the user will see later
     String time=''; //time in that location
   String flag;//url to an asset flag icon;
    String url;//this is the location url for api end point;
+ bool isDayTime=false;
   WorldTime({required this.location,required this.flag,required this.url});
+
+
 
  Future <void> getData() async  // as before function nature asynchrous so if async keyword is used same will happen
       {
@@ -37,7 +40,16 @@ class WorldTime{
      //so this is json string so we have to convert in a format so that we can use
      //now it is converted into map.
      Map data = jsonDecode(response.body);
-     time = data['dateTime'].toString();
+     // time = data['dateTime'];
+     DateTime dateTime = DateTime.parse(data['dateTime']);
+
+     isDayTime=data['hour']>6 && data['hour']<20 ?true:false;
+     time=(DateFormat.jm().format(dateTime)).toString();//DateFormat.jm().format() expects a DateTime object, not a String. If you pass a String (even if it "looks like" a valid date-time), it will throw an error, as the method cannot interpret the String
+     // Correct Flow
+     // Parse the String into a DateTime object: Use DateTime.parse(data['dateTime']) to convert the String to a DateTime.
+     //
+     // Format the DateTime into a time String: Use DateFormat.jm().format(dateTime)
+     //
      // print(data['title']);//value retrived based on key
      //get properties from data
      // String datetime=data['datetime'];
@@ -49,6 +61,7 @@ class WorldTime{
      // DateTime now=DateTime.parse(datetime);
      // now=now.add(Duration(hours: int.parse(offset)));
      // time=now.toString();//set the time property
+
    }
    catch(e)
    {

@@ -1,7 +1,7 @@
 // import 'dart:convert';
 // import 'package:http/http.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:world_time/services/world_time.dart';
 class Loading extends StatefulWidget {
   const Loading({super.key});
@@ -44,14 +44,20 @@ String time='loading';
   //     }
   void setupWorldTime ()async
   {
-    WorldTime instance1= new WorldTime(location: 'Berlin', flag: 'germany.png', url: 'Europe%2FAmsterdam');
+    WorldTime instance1= new WorldTime(location: 'Amsterdam', flag: 'Netherlands.png', url: 'Europe%2FAmsterdam');
   await instance1.getData();// we have to use await keyword and Future to the function ,so that it knows when the function completes ,it moves to the next line.Future is placeholder value it wraps the void indicating it will return void only if the function completes.By declaring Future<void>, you:
 
     // Ensure the calling code can await the completion of getData().Future represents a value (or error) that will be available at some point in the future.
-  print(instance1.time);//this will not happen as getData is async function ,so nature is non blocking ,so by default it next step is executing and we won't able to get the time ,so for that we have to use await instance.getData();
-  setState(() {
-    time=instance1.time;
-  });
+  // print(instance1.time);//this will not happen as getData is async function ,so nature is non blocking ,so by default it next step is executing and we won't able to get the time ,so for that we have to use await instance.getData();
+  // setState(() {
+  //   time=instance1.time;
+  // });
+    Navigator.pushReplacementNamed(context, '/home',arguments: {
+      'location':instance1.location,
+      'flag':instance1.flag,
+      'time':instance1.time,
+      'isDaytime':instance1.isDayTime
+    });
   }
 
   @override
@@ -68,10 +74,17 @@ String time='loading';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     body:Padding(padding: EdgeInsets.all(50.0),
-       child: Text(time),
-       
-     )
+     // body:Padding(padding: EdgeInsets.all(50.0),
+     //   child: Text(time),
+     //
+     // )
+      backgroundColor: Colors.blue[500],
+      body: Center(
+child: SpinKitCubeGrid(
+  color: Colors.white,
+  size: 50.0,
+),
+      ),
     );
   }
 }

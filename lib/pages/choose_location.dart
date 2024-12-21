@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:world_time/services/world_time.dart';
 class ChooseLocation extends StatefulWidget {
   const ChooseLocation({super.key});
 
@@ -38,6 +38,28 @@ class _ChooseLocationState extends State<ChooseLocation> {
 //   }//first this function will executed when screen loads and it will fire only once.
 //
 
+  List<WorldTime> locations = [
+
+    WorldTime(url: 'Africa%2FCairo', location: 'Cairo', flag: 'egypt.png'),
+    WorldTime(url: 'Africa%2FNairobi', location: 'Nairobi', flag: 'kenya.png'),
+    WorldTime(url: 'America%2FChicago', location: 'Chicago', flag: 'usa.png'),
+    WorldTime(url: 'Asia%2FSeoul', location: 'Seoul', flag: 'south_korea.png'),
+
+  ];
+
+  Future<void> updateTime(index)
+  async {
+    WorldTime instance=locations[index];
+    await instance.getData();
+    //navigate to home screen
+    Navigator.pop(context,{
+      'location':instance.location,
+      'flag':instance.flag,
+      'time':instance.time,
+      'isDaytime':instance.isDayTime
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // print('build function ran');//when build the widget tree then it runs
@@ -49,6 +71,23 @@ class _ChooseLocationState extends State<ChooseLocation> {
         centerTitle: true,
         elevation: 0,
       ),
+      body:ListView.builder(itemCount: locations.length, itemBuilder: (BuildContext context, int index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 1.0,horizontal: 4.0),
+          child: Card(
+            child:ListTile(
+              onTap: (){
+                // print(locations[index].location);
+                updateTime(index);
+              },
+              title: Text(locations[index].location),//return  a widget template for each item
+            leading:CircleAvatar(
+              backgroundImage: AssetImage('assets/${locations[index].flag}'),
+            ),
+            )
+          ),
+        );
+      },)
       // body: TextButton(onPressed: () {
       //   setState(() {
       //     // counter=counter+1;
